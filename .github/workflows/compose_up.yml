@@ -21,6 +21,12 @@ jobs:
       with:
         project_id: ${{ secrets.GCP_PROJECT_ID }}
 
+    - name: Set environment variables
+      run: |
+        echo "PORT=8080" >> $GITHUB_ENV
+        echo "UID=$(id -u)" >> $GITHUB_ENV
+        echo "GID=$(id -g)" >> $GITHUB_ENV
+
     - name: Deploy to Cloud Run
       env:
         GCP_PROJECT: ${{ secrets.GCP_PROJECT_ID }}
