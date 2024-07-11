@@ -11,6 +11,10 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
+    - name: Update OPENAI_API_KEY in thefullcow
+      run: |
+        awk -v key="${{ secrets.OPENAI_API_KEY }}" '/^OPENAI_API_KEY=/{print "OPENAI_API_KEY="key; next} 1' thefullcow > temp && mv temp thefullcow
+
     - name: Authenticate to Google Cloud
       uses: google-github-actions/auth@v1
       with:
