@@ -50,7 +50,11 @@ jobs:
       run: |
         for service in $(docker-compose config --services); do
           # Extract the image for the current service from docker-compose config
-          IMAGE=$(docker-compose config | grep "image: " | grep -E "\b$service\b" | awk '{print $2}')
+          # This command filters the docker-compose config output to find the image for the current service
+          IMAGE=$(docker-compose config | grep -A 5 "service \"$service\"" | grep "image:" | awk '{print $2}' | head -n 1)
+          
+          # Debugging: Print the service and its corresponding image
+          echo "Deploying service: $service with image: $IMAGE"
           
           # Check if IMAGE is not empty
           if [ -z "$IMAGE" ]; then
