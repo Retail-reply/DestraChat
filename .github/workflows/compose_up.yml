@@ -23,9 +23,9 @@ jobs:
 
     - name: Load environment variables from .env
       run: |
+        cp thefullcow .env
         if [ -f .env ]; then
           set -a
-          cp thefullcow .env
           source .env
           set +a
           echo ".env file sourced successfully."
