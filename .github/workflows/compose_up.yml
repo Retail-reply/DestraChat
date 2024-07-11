@@ -45,6 +45,15 @@ jobs:
         GCP_PROJECT: ${{ secrets.GCP_PROJECT_ID }}
       run: |
         for service in $(docker-compose config --services); do
-          IMAGE=$(docker-compose config | grep "image: " | grep $service | awk '{print $2}')
+          # Extract the image for the current service from docker-compose config
+          IMAGE=$(docker-compose config | grep "image: " | grep -E "\b$service\b" | awk '{print $2}')
+          
+          # Check if IMAGE is not empty
+          if [ -z "$IMAGE" ]; then
+            echo "Image for service $service not found."
+            continue
+          fi
+        
+          # Deploy to Cloud Run
           gcloud run deploy $service --image $IMAGE --platform managed --region europe-west1 --allow-unauthenticated
         done
