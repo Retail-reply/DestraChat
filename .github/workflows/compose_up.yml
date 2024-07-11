@@ -21,7 +21,13 @@ jobs:
       with:
         project_id: ${{ secrets.GCP_PROJECT_ID }}
 
-    - name: Set environment variables
+    - name: Load environment variables from .env
+      run: |
+        set -a
+        source .env
+        set +a
+
+    - name: Set additional environment variables
       run: |
         echo "PORT=8080" >> $GITHUB_ENV
         echo "UID=$(id -u)" >> $GITHUB_ENV
